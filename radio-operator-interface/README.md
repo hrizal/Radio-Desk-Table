@@ -1,53 +1,53 @@
 # Radio Operator Interface
 
-Interface web-based untuk radio operator memainkan dan mengatur lagu yang diputar di radio streaming dengan memanfaatkan fitur dari [GO-AUDIO-BROADCASTER](https://github.com/hrizal/GO-AUDIO-BROADCASTER).
+Web-based interface for radio operators to play and manage songs broadcasted on streaming radio, leveraging features from [GO-AUDIO-BROADCASTER](https://github.com/hrizal/GO-AUDIO-BROADCASTER).
 
-## Fitur Utama
+## Main Features
 
-### 1. Music Library (Panel Kiri)
-- **Pustaka Lagu Lokal**: Menampilkan semua lagu yang tersedia di server
-- **Pencarian & Filter**: Cari berdasarkan judul/artis, filter berdasarkan genre
-- **Upload Lagu**: Drag & drop atau browse file audio untuk diupload
-- **Multi-select**: Pilih beberapa lagu sekaligus untuk ditambahkan ke playlist
+### 1. Music Library (Left Panel)
+- **Local Song Library**: Display all available songs on the server
+- **Search & Filter**: Search by title/artist, filter by genre
+- **Upload Songs**: Drag & drop or browse audio files to upload
+- **Multi-select**: Select multiple songs at once to add to playlist
 
-### 2. Player Controls & Mixer (Panel Tengah)
-- **Now Playing**: Informasi lagu yang sedang diputar dengan progress bar
+### 2. Player Controls & Mixer (Center Panel)
+- **Now Playing**: Current song information with progress bar
 - **Player Controls**: Play/Pause, Stop, Previous, Next, Repeat
 - **4-Channel Mixer**: 
   - Music Volume
   - Microphone Volume
   - Effects Volume
   - Master Volume
-- **Breaking Audio**: Trigger breaking news/alert dengan ducking otomatis
+- **Breaking Audio**: Trigger breaking news/alert with automatic ducking
 - **Stream Information**: Bitrate, listeners, uptime, station name
 
-### 3. Playlist (Panel Kanan)
-- **Queue Management**: Lagu yang akan diputar secara berurutan
+### 3. Playlist (Right Panel)
+- **Queue Management**: Songs to be played in order
 - **Playlist Actions**: Clear, Shuffle, Save
-- **Drag to Reorder**: (coming soon) Urutkan ulang playlist
-- **Real-time Stats**: Jumlah lagu dan total durasi
+- **Drag to Reorder**: (coming soon) Reorder playlist
+- **Real-time Stats**: Song count and total duration
 
 ### 4. Push-to-Talk (PTT) Mic
-- **WebRTC Ingress**: Siaran langsung menggunakan microphone via WebRTC
-- **Hold-to-Talk**: Tekan dan tahan tombol (atau spasi) untuk berbicara
-- **Mic Gain Control**: Atur sensitivitas microphone
-- **Visual Feedback**: Indikator status microphone on/off
+- **WebRTC Ingress**: Live broadcasting using microphone via WebRTC
+- **Hold-to-Talk**: Press and hold button (or spacebar) to talk
+- **Mic Gain Control**: Adjust microphone sensitivity
+- **Visual Feedback**: Microphone on/off status indicator
 
-### 5. Monitor Siaran
-- **WebRTC Egress**: Monitor siaran dengan zero-latency via WebRTC
-- **Monitor Volume**: Kontrol volume monitoring terpisah
-- **Toggle On/Off**: Aktifkan/nonaktifkan monitoring
+### 5. Broadcast Monitor
+- **WebRTC Egress**: Zero-latency broadcast monitoring via WebRTC
+- **Monitor Volume**: Separate monitoring volume control
+- **Toggle On/Off**: Enable/disable monitoring
 
-## Teknologi
+## Technology Stack
 
-- **HTML5** - Struktur aplikasi
-- **CSS3** - Styling modern dengan CSS Variables, Grid, Flexbox
-- **Vanilla JavaScript** - Logika aplikasi tanpa framework berat
-- **WebRTC API** - Untuk PTT mic dan monitoring
+- **HTML5** - Application structure
+- **CSS3** - Modern styling with CSS Variables, Grid, Flexbox
+- **Vanilla JavaScript** - Application logic without heavy frameworks
+- **WebRTC API** - For PTT mic and monitoring
 - **Font Awesome** - Icon library
 - **Google Fonts (Inter)** - Typography
 
-## Struktur File
+## File Structure
 
 ```
 radio-operator-interface/
@@ -60,22 +60,22 @@ radio-operator-interface/
 └── README.md          # This file
 ```
 
-## Konfigurasi
+## Configuration
 
 ### Settings Modal
-Akses melalui tombol gear di header kanan:
+Access via gear button in top-right header:
 
 1. **Server Configuration**
-   - Server URL: Alamat server GO-AUDIO-BROADCASTER
-   - API Token: Token untuk autentikasi API
-   - WebRTC Token: Token untuk koneksi WebRTC
+   - Server URL: GO-AUDIO-BROADCASTER server address
+   - API Token: Authentication token for API
+   - WebRTC Token: Token for WebRTC connection
 
 2. **Audio Settings**
-   - Audio Input Device: Pilih microphone
+   - Audio Input Device: Select microphone
    - Audio Quality: High/Medium/Low
 
 3. **Station Configuration**
-   - Select Station: Pilih station jika multi-station
+   - Select Station: Choose station if multi-station setup
 
 ## Keyboard Shortcuts
 
@@ -83,11 +83,11 @@ Akses melalui tombol gear di header kanan:
 |----------|--------|
 | `Space` (hold) | Push-to-Talk |
 | `M` | Toggle Monitor |
-| `Space` (click) | Play/Pause (saat tidak PTT) |
+| `Space` (click) | Play/Pause (when not PTT) |
 
-## Integrasi dengan GO-AUDIO-BROADCASTER
+## GO-AUDIO-BROADCASTER Integration
 
-### API Endpoints (Contoh)
+### API Endpoints (Examples)
 
 ```javascript
 // Load Library
@@ -105,7 +105,7 @@ PUT /api/mixer/{channel}
 POST /api/breaking
 { "type": "urgent", "message": "Breaking news..." }
 
-// WebRTC Inress (PTT)
+// WebRTC Ingress (PTT)
 POST /api/webrtc/ingress
 { "sdp": "offer_sdp" }
 
@@ -116,35 +116,35 @@ POST /api/webrtc/egress
 ### WebRTC Flow
 
 #### PTT (Ingress)
-1. User menekan tombol PTT
-2. Browser meminta akses microphone
-3. Buat RTCPeerConnection
-4. Send audio track ke peer connection
-5. Create offer dan kirim ke server
-6. Server response dengan answer
-7. Audio stream dikirim ke broadcaster
+1. User presses PTT button
+2. Browser requests microphone access
+3. Create RTCPeerConnection
+4. Send audio track to peer connection
+5. Create offer and send to server
+6. Server responds with answer
+7. Audio stream sent to broadcaster
 
 #### Monitor (Egress)
-1. User klik Monitor button
-2. Request monitoring endpoint ke server
-3. Server kirim offer SDP
-4. Browser create answer
-5. Receive audio track dari server
-6. Play audio melalui speaker
+1. User clicks Monitor button
+2. Request monitoring endpoint to server
+3. Server sends offer SDP
+4. Browser creates answer
+5. Receive audio track from server
+6. Play audio through speaker
 
-## Cara Menggunakan
+## Usage Guide
 
 ### Development
-1. Buka `index.html` di browser modern
-2. Klik tombol **CONNECT** untuk connect ke server
-3. Configure settings jika diperlukan
-4. Mulai manage playlist dan broadcast
+1. Open `index.html` in a modern browser
+2. Click **CONNECT** button to connect to server
+3. Configure settings if needed
+4. Start managing playlist and broadcasting
 
 ### Production
-1. Deploy ke web server (nginx, Apache, dll)
-2. Configure server URL di settings
-3. Pastikan CORS enabled di GO-AUDIO-BROADCASTER
-4. Setup SSL/HTTPS untuk WebRTC (required)
+1. Deploy to web server (nginx, Apache, etc.)
+2. Configure server URL in settings
+3. Ensure CORS is enabled on GO-AUDIO-BROADCASTER
+4. Setup SSL/HTTPS for WebRTC (required)
 
 ## Browser Support
 
@@ -153,12 +153,12 @@ POST /api/webrtc/egress
 - Safari 14+
 - Edge 80+
 
-**Note**: WebRTC requires HTTPS in production (kecuali localhost)
+**Note**: WebRTC requires HTTPS in production (except localhost)
 
 ## Customization
 
 ### Theme Colors
-Edit CSS variables di `css/style.css`:
+Edit CSS variables in `css/style.css`:
 
 ```css
 :root {
@@ -170,7 +170,7 @@ Edit CSS variables di `css/style.css`:
 ```
 
 ### Add New Features
-Extend `RadioOperator` class di `js/app.js`:
+Extend `RadioOperator` class in `js/app.js`:
 
 ```javascript
 class RadioOperator {
@@ -184,18 +184,18 @@ class RadioOperator {
 ## Troubleshooting
 
 ### WebRTC Not Working
-- Pastikan HTTPS (atau localhost)
-- Check browser permissions untuk microphone
-- Verify WebRTC token valid
+- Ensure HTTPS (or localhost)
+- Check browser permissions for microphone
+- Verify WebRTC token is valid
 
 ### Cannot Connect to Server
-- Check server URL correct
+- Check server URL is correct
 - Verify API token
 - Check CORS configuration
 
 ### Audio Not Playing
 - Check browser autoplay policy
-- Verify audio files format supported
+- Verify audio file formats are supported
 - Check mixer volume levels
 
 ## License
@@ -204,4 +204,4 @@ MIT License
 
 ## Credits
 
-Dibuat untuk digunakan dengan [GO-AUDIO-BROADCASTER](https://github.com/hrizal/GO-AUDIO-BROADCASTER)
+Created for use with [GO-AUDIO-BROADCASTER](https://github.com/hrizal/GO-AUDIO-BROADCASTER)
