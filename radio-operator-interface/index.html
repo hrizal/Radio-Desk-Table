@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Operator Interface</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1><i class="fas fa-broadcast-tower"></i> Radio Operator</h1>
+                <span class="status-indicator" id="streamStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Disconnected</span>
+                </span>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-settings" id="settingsBtn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="btn btn-profile" id="profileBtn" title="Profile">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel - Music Library -->
+            <section class="panel panel-left">
+                <div class="panel-header">
+                    <h2><i class="fas fa-music"></i> Music Library</h2>
+                    <div class="library-controls">
+                        <button class="btn btn-sm btn-primary" id="refreshLibraryBtn" title="Refresh Library">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" id="uploadBtn" title="Upload Songs">
+                            <i class="fas fa-upload"></i> Upload
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="librarySearch" placeholder="Search songs...">
+                </div>
+
+                <div class="library-filters">
+                    <select id="genreFilter">
+                        <option value="">All Genres</option>
+                    </select>
+                    <select id="artistFilter">
+                        <option value="">All Artists</option>
+                    </select>
+                </div>
+
+                <div class="library-list" id="libraryList">
+                    <!-- Library items will be populated here -->
+                    <div class="loading-state" id="libraryLoading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading library...</p>
+                    </div>
+                </div>
+
+                <div class="library-stats">
+                    <span id="totalSongs">0 songs</span>
+                    <span id="totalDuration">00:00:00</span>
+                </div>
+            </section>
+
+            <!-- Center Panel - Player Controls & Mixer -->
+            <section class="panel panel-center">
+                <!-- Now Playing -->
+                <div class="now-playing-section">
+                    <div class="now-playing-card">
+                        <div class="album-art" id="currentAlbumArt">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="track-info">
+                            <h3 id="currentTrackTitle">No Track Playing</h3>
+                            <p id="currentTrackArtist">-</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="trackProgress"></div>
+                                <div class="progress-time">
+                                    <span id="currentTime">0:00</span>
+                                    <span id="totalTime">0:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Player Controls -->
+                <div class="player-controls">
+                    <button class="btn btn-control" id="prevBtn" title="Previous">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="btn btn-control btn-large" id="playPauseBtn" title="Play/Pause">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn btn-control btn-large" id="stopBtn" title="Stop">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button class="btn btn-control" id="nextBtn" title="Next">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="btn btn-control" id="repeatBtn" title="Repeat">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+
+                <!-- Volume & Mixer -->
+                <div class="mixer-section">
+                    <h3><i class="fas fa-sliders-h"></i> Mixer</h3>
+                    <div class="mixer-channels">
+                        <div class="channel">
+                            <label>Music</label>
+                            <input type="range" id="musicVolume" min="0" max="100" value="80">
+                            <span class="volume-value" id="musicVolumeValue">80%</span>
+                        </div>
+                        <div class="channel">
+                            <label>Microphone</label>
+                            <input type="range" id="micVolume" min="0" max="100" value="70">
+                            <span class="volume-value" id="micVolumeValue">70%</span>
+                        </div>
+                        <div class="channel">
+                            <label>Effects</label>
+                            <input type="range" id="effectsVolume" min="0" max="100" value="50">
+                            <span class="volume-value" id="effectsVolumeValue">50%</span>
+                        </div>
+                        <div class="channel">
+                            <label>Master</label>
+                            <input type="range" id="masterVolume" min="0" max="100" value="90">
+                            <span class="volume-value" id="masterVolumeValue">90%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Breaking Audio -->
+                <div class="breaking-section">
+                    <button class="btn btn-danger btn-block" id="breakingBtn">
+                        <i class="fas fa-exclamation-triangle"></i> BREAKING AUDIO
+                    </button>
+                    <div class="breaking-options" id="breakingOptions" style="display: none;">
+                        <select id="breakingSound">
+                            <option value="default">Default Alert</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="emergency">Emergency</option>
+                        </select>
+                        <input type="text" id="breakingMessage" placeholder="Breaking message...">
+                        <button class="btn btn-sm btn-primary" id="triggerBreaking">Trigger</button>
+                    </div>
+                </div>
+
+                <!-- Stream Info -->
+                <div class="stream-info">
+                    <h3><i class="fas fa-info-circle"></i> Stream Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Bitrate:</label>
+                            <span id="streamBitrate">128 kbps</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Listeners:</label>
+                            <span id="streamListeners">0</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Uptime:</label>
+                            <span id="streamUptime">00:00:00</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Station:</label>
+                            <span id="stationName">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel - Playlist -->
+            <section class="panel panel-right">
+                <div class="panel-header">
+                    <h2><i class="fas fa-list-ul"></i> Playlist</h2>
+                    <div class="playlist-controls">
+                        <button class="btn btn-sm btn-warning" id="clearPlaylistBtn" title="Clear Playlist">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info" id="shuffleBtn" title="Shuffle">
+                            <i class="fas fa-random"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" id="savePlaylistBtn" title="Save Playlist">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="playlist-actions">
+                    <button class="btn btn-block btn-primary" id="addToPlaylistBtn">
+                        <i class="fas fa-plus"></i> Add Selected to Playlist
+                    </button>
+                </div>
+
+                <div class="playlist-list" id="playlistList">
+                    <!-- Playlist items will be populated here -->
+                    <div class="empty-state" id="playlistEmpty">
+                        <i class="fas fa-music"></i>
+                        <p>No songs in playlist</p>
+                        <small>Add songs from the library</small>
+                    </div>
+                </div>
+
+                <div class="playlist-stats">
+                    <span id="playlistCount">0 songs</span>
+                    <span id="playlistDuration">00:00:00</span>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Bar - PTT & Monitor -->
+        <footer class="bottom-bar">
+            <div class="ptt-section">
+                <button class="btn btn-ptt" id="pttBtn">
+                    <i class="fas fa-microphone"></i>
+                    <span>PUSH TO TALK</span>
+                </button>
+                <div class="ptt-status" id="pttStatus">
+                    <span class="ptt-indicator"></span>
+                    <span class="ptt-text">Mic Off</span>
+                </div>
+                <div class="mic-settings">
+                    <label>Gain:</label>
+                    <input type="range" id="micGain" min="0" max="100" value="75">
+                    <button class="btn btn-sm" id="micTestBtn" title="Test Mic">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="monitor-section">
+                <button class="btn btn-monitor" id="monitorBtn">
+                    <i class="fas fa-headphones"></i>
+                    <span>MONITOR</span>
+                </button>
+                <div class="monitor-status" id="monitorStatus">
+                    <span class="monitor-indicator"></span>
+                    <span class="monitor-text">Monitor Off</span>
+                </div>
+                <div class="monitor-controls">
+                    <label>Volume:</label>
+                    <input type="range" id="monitorVolume" min="0" max="100" value="80">
+                </div>
+            </div>
+
+            <div class="connection-section">
+                <button class="btn btn-connect" id="connectBtn">
+                    <i class="fas fa-plug"></i>
+                    <span>CONNECT</span>
+                </button>
+                <div class="connection-info">
+                    <span id="serverStatus">Server: Disconnected</span>
+                    <span id="webrtcStatus">WebRTC: Not Ready</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="btn-close" id="closeSettingsModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Server Configuration</h3>
+                    <div class="form-group">
+                        <label for="serverUrl">Server URL:</label>
+                        <input type="text" id="serverUrl" placeholder="http://localhost:8080">
+                    </div>
+                    <div class="form-group">
+                        <label for="apiToken">API Token:</label>
+                        <input type="password" id="apiToken" placeholder="Enter API token">
+                    </div>
+                    <div class="form-group">
+                        <label for="webrtcToken">WebRTC Token:</label>
+                        <input type="password" id="webrtcToken" placeholder="Enter WebRTC token">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Audio Settings</h3>
+                    <div class="form-group">
+                        <label for="audioDevice">Audio Input Device:</label>
+                        <select id="audioDevice">
+                            <option value="">Default</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="audioQuality">Audio Quality:</label>
+                        <select id="audioQuality">
+                            <option value="high">High (48kHz)</option>
+                            <option value="medium" selected>Medium (44.1kHz)</option>
+                            <option value="low">Low (32kHz)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Station Configuration</h3>
+                    <div class="form-group">
+                        <label for="stationSelect">Select Station:</label>
+                        <select id="stationSelect">
+                            <option value="">Auto-detect</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSettingsBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-upload"></i> Upload Songs</h2>
+                <button class="btn-close" id="closeUploadModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Drag and drop audio files here</p>
+                    <p>or</p>
+                    <button class="btn btn-primary" id="browseFilesBtn">Browse Files</button>
+                    <input type="file" id="fileInput" multiple accept="audio/*" style="display: none;">
+                </div>
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="uploadProgressBar"></div>
+                    </div>
+                    <p id="uploadStatus">Uploading...</p>
+                </div>
+                <div class="upload-list" id="uploadList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
